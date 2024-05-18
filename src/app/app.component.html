@@ -1,5 +1,72 @@
-<div class="grid h-screen place-items-center">
-  <div class="font-bold text-3xl">
-    Fyle Internship Challenge
+<div class="container">
+  <header class="header">
+    <div class="header-content">
+      <img src="assets/logo.png" alt="Logo" class="logo">
+      <h1>Git Galaxy</h1>
+    </div>
+
+  </header>
+  <div class="vertical-line"></div>
+  <div class="about-whole">
+    <div class="about-section">
+      <div class="about-content">
+        <div class="about-text">
+          <h2 class="about-title">Revealing <span>Git Galaxy</span></h2>
+          <p>Discover GitHub users, repositories, and portfolios with GitGalaxy.<br>
+            Connect with fellow developers and explore innovative projects.<br>
+            Collaborate seamlessly on exciting coding ventures.<br>
+            Join GitGalaxy and unlock limitless possibilities for your coding journey!</p>
+        </div>
+        <div class="about-gif">
+          <img src="assets/left1.gif" alt="About GIF">
+        </div>
+      </div>
+    </div>
+    <h3 class="search-heading">Begin your GitHub exploration journey.</h3>
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="Enter GitHub username" [(ngModel)]="username">
+      <button class="search-button" (click)="searchUser()">Search</button>
+    </div>
   </div>
+  <!-- Loader -->
+  <div class="loader" *ngIf="loading">
+    <img src="assets/loader.gif" alt="Loading...">
+  </div>
+
+  <div class="mainsection" *ngIf="!loading">
+    <main>
+      <div class="profile-section" *ngIf="userDetails">
+        <img [src]="userDetails.avatar_url" alt="Avatar" class="avatar">
+        <div class="user-info">
+          <h2>{{ userDetails.name }}</h2>
+          <p>{{ userDetails.bio }}</p>
+          <p>Followers: {{ userDetails.followers }} | Following: {{ userDetails.following }}</p>
+        </div>
+      </div>
+
+      <div class="repositories-section">
+        <div *ngFor="let repo of pagedRepositories[currentPage]" class="repository">
+          <h3>{{ repo.name }}</h3>
+          <p>{{ repo.description }}</p>
+          <p>Language: {{ repo.language }}</p>
+          <p>Stars: {{ repo.stargazers_count }} | Forks: {{ repo.forks }}</p>
+          <a [href]="repo.html_url" target="_blank">View on GitHub</a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer" *ngIf="!loading && pagedRepositories.length">
+      <div class="pagination">
+        <button class="page-button" (click)="prevPage()" [disabled]="currentPage === 0">Previous</button>
+        <div class="items-per-page-container">
+          <label for="itemsPerPage">Items per page:</label>
+          <select id="itemsPerPage" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()" class="items-per-page-select">
+            <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+        <button class="page-button" (click)="nextPage()" [disabled]="currentPage === pagedRepositories.length - 1">Next</button>
+      </div>
+    </footer>
+  </div>
+
 </div>
